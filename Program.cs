@@ -12,7 +12,8 @@ namespace Kodanalys
             bool isRunning = true;
             while (isRunning)
             {
-                Console.WriteLine("Välj ett alternativ:");
+                Console.Clear();
+                Console.WriteLine("Välj ett alternativ:\n");
                 Console.WriteLine("1. Lägg till användare");
                 Console.WriteLine("2. Visa alla användare");
                 Console.WriteLine("3. Ta bort användare");
@@ -29,6 +30,7 @@ namespace Kodanalys
                         {
                             customers[customerCount] = userName;
                             customerCount++;
+                            Console.WriteLine("Användaren har lagts till.");
                         }
                         else
                         {
@@ -38,24 +40,23 @@ namespace Kodanalys
 
                     case "2":
                         Console.WriteLine("Användare:");
-                        for (int i = 0; i < customerCount; i++)
+                        if (customerCount == 0)
                         {
-                            Console.WriteLine(customers[i]);
+                            Console.WriteLine("Inga användare finns.");
+                        }
+                        else
+                        {
+                            for (int i = 0; i < customerCount; i++)
+                            {
+                                Console.WriteLine(customers[i]);
+                            }
                         }
                         break;
 
                     case "3":
                         Console.Write("Ange namn att ta bort: ");
                         string removeUserName = Console.ReadLine();
-                        int removeIndex = -1;
-                        for (int i = 0; i < customerCount; i++)
-                        {
-                            if (customers[i] == removeUserName)
-                            {
-                                removeIndex = i;
-                                break;
-                            }
-                        }
+                        int removeIndex = FindUser(removeUserName);
                         if (removeIndex != -1)
                         {
                             for (int i = removeIndex; i < customerCount - 1; i++)
@@ -63,6 +64,7 @@ namespace Kodanalys
                                 customers[i] = customers[i + 1];
                             }
                             customerCount--;
+                            Console.WriteLine("Användaren togs bort.");
                         }
                         else
                         {
@@ -74,16 +76,7 @@ namespace Kodanalys
                         {
                             Console.Write("Ange namn att söka: ");
                             string searchUserName = Console.ReadLine();
-                            bool userFound = false;
-                            for (int i = 0; i < customerCount; i++)
-                            {
-                                if (customers[i] == searchUserName)
-                                {
-                                    userFound = true;
-                                    break;
-                                }
-                            }
-                            if (userFound)
+                            if (FindUser(searchUserName) != -1)
                             {
                                 Console.WriteLine("Användaren finns i listan.");
                             }
@@ -93,19 +86,30 @@ namespace Kodanalys
                             }
                         }
                         break;
+
                     case "5":
-
                         isRunning = false;
-                        Console.WriteLine("Ogiltigt val.");
-
+                        Console.WriteLine("Programmet avslutas.");
                         break;
 
-                        Console.WriteLine();
+                    default:
+                        Console.WriteLine("Ogiltigt val.");
+                        break;
 
                 }
-
+                Console.WriteLine("\nTryck på valfri tangent för att fortsätta...");
+                Console.ReadKey();
             }
         }
 
+        static int FindUser(string name)
+        {
+            for (int i = 0; i < customerCount; i++)
+            {
+                if (customers[i] == name)
+                    return i;
+            }
+            return -1;
+        }
     }
 }
